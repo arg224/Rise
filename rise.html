@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Widget</title>
+    <!-- Add your styles here -->
+    <style>
+        /* Add your custom styles for the weather widget */
+        #weather-widget {
+            /* Add your styles */
+        }
+    </style>
+</head>
+<body>
+
+<script src="path/to/openmeteo-library.js"></script>
+<script>
+  function createWeatherWidget(targetDivId) {
+    // Create a new div dynamically
+    const weatherDiv = document.createElement('div');
+    weatherDiv.id = 'weather-widget';
+
+    // Add the div to the body or a specified target div
+    const targetContainer = targetDivId ? document.getElementById(targetDivId) : document.body;
+    targetContainer.appendChild(weatherDiv);
+
+    // Function to calculate average temperature for each day of the week
+    function calculateAverageTemperature(data) {
+      const dailyTemperatures = {};
+
+      // Process weather data and calculate average temperature for each day
+      data.hourly.forEach(entry => {
+        const date = new Date(entry.timestamp * 1000); // Convert timestamp to Date object
+        const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'long' });
+
+        if (!dailyTemperatures[dayOfWeek]) {
+          dailyTemperatures[dayOfWeek] = {
+            temperatureSum: 0,
+            count: 0,
+          };
+        }
+
+        dailyTemperatures[dayOfWeek].temperatureSum += entry.air_temperature;
+        dailyTemperatures[dayOfWeek].count++;
+      });
+
+      // Calculate average temperature for each day
+      const averages = {};
+      for (const day in dailyTemperatures) {
+        const averageTemperature =
+          dailyTemperatures[day].temperatureSum / dailyTemperatures[day].count;
+        averages[day] = averageTemperature.toFixed(2) + '°C';
+      }
+
+      return averages;
+    }
+
+    // Function to fetch weather data from open-meteo API
+    function getWeatherData(cityName) {
+      // API Endpoint: https://api.open-meteo.com/weather?forecast=7&daily=weatherday&hourly=temperature_2m
+    //   const apiUrl = `https://api.open-meteo.com/v1/&forecast_days=16&hourly=temperature_2m&location=${encodeURIComponent(
+    //     cityName
+    //   )}`;
+
+
+    //   return fetch(apiUrl)
+    //     .then(response => response.json())
+    //     .then(data => calculateAverageTemperature(data))
+    //     .catch(error => console.error('Error fetching weather data:', error));
+    // Assuming fetchWeatherApi is globally available
+const params = {
+  latitude: 52.52,
+  longitude: 13.41,
+  hourly: 'temperature_2m',
+};
+
+const url = 'https://api.open-meteo.com/v1/forecast';
+const responses = fetchWeatherApi(url, params);
+
+// Helper function to form time ranges
+const range = (start, stop, step) =>
+  Array.from({ length: (stop - start) / step }, (_, i) => start + i * step);
+
+// Process first location. Add a for-loop for multiple locations or weather models
+const response = responses[0];
+
+// Attributes for timezone and location
+const utcOffsetSeconds = response.utcOffsetSeconds();
+const timezone = response.timezone();
+const timezoneAbbreviation = response.timezoneAbbreviation();
+const latitude = response.latitude();
+const longitude = response.longitude();
+
+const hourly = response.hourly();
+
+// Note: The order of weather variables in the URL query and the indices below need to match!
+const weatherData = {
+  hourly: {
+    time: range(Number(hourly.time()), Number(hourly.timeEnd()), hourly.interval()).map(
+      (t) => new Date((t + utcOffsetSeconds) * 1000)
+    ),
+    temperature2m: hourly.variables(0).valuesArray(),
+  },
+};
+
+// `weatherData` now contains a simple structure with arrays for datetime and weather data
+for (let i = 0; i < weatherData.hourly.time.length; i++) {
+  console.log(
+    weatherData.hourly.time[i].toISOString(),
+    weatherData.hourly.temperature2m[i]
+  );
+}
+
+    }
+
+    // Function to update the weather widget content
+    function updateWeatherWidget(cityName) {
+      getWeatherData(cityName).then(averages => {
+        // Update the weather widget content
+        weatherDiv.innerHTML = `<h2>Weather Forecast for ${cityName}</h2>`;
+        for (const day in averages) {
+          weatherDiv.innerHTML += `<p>${day}: ${averages[day]}</p>`;
+        }
+      });
+    }
+
+    // Prompt the user to enter a city name or coordinates
+    const cityName = prompt('Enter a city name or coordinates (latitude, longitude):');
+    if (cityName) {
+      // Update the weather widget with the provided city name or coordinates
+      updateWeatherWidget(cityName);
+    } else {
+      // If no input is provided, display a message
+      weatherDiv.innerHTML = '<p>No city name or coordinates provided.</p>';
+    }
+  }
+
+  // Call the function with a target div id if needed
+  createWeatherWidget(); // or createWeatherWidget('your-div-id');
+</script>
+</body>
+</html>

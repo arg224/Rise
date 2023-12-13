@@ -31,11 +31,18 @@ const weatherCodes = {
 
 const isLatLngRE = /\d+,\d+/;
 
-function addWidget(divId) {
+function addWidget(divId="defaultWidgetContainer") {
     const styleLink = document.createElement("link");
     styleLink.rel = "stylesheet";
-    styleLink.href = "./weatherWidget.css"
+    styleLink.href = "https://arg224.github.io/Rise/weatherWidget.css"
+    // styleLink.href = "weatherWidget.css"
+
     document.head.appendChild(styleLink)
+    if(!document.querySelector(`#${divId}`)){
+        const newDiv = document.createElement("div");
+        newDiv.id = divId;
+        document.body.append(newDiv);
+    }
     const target = document.querySelector(`#${divId}`);
     target.classList.add("weather-widget")
 

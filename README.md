@@ -1,8 +1,10 @@
 # Ariana Gewurz Rise interview take home assignment 
 
-## This was my first time working with injecting scripts into divs in Javascript. I enjoyed learning about the process and deeloping this code. This simple weather widget allows you to inject weather information into your webpage. The widget retrieves data from the  JavaScript file which I uploaded to Git and injects it into a specified <div> on the page. As such, by opening the index1.html file, in a web browser, the following script tag will inject the targetDivId weatherWidget into the web page: <!-- <script src= "https://arg224.github.io/Rise/weatherWidget.js" targetDivId="weatherWidget" ></script> --> 
+## This was my first time working with injecting scripts into divs in Javascript. I enjoyed learning about the process and deeloping this code. 
 
-### This program can be run both locally and not. To run locally open a terminal and create a server by typing: npx live-server and clicking into index-1. 
+#### This simple weather widget allows you to inject weather information into your webpage. The widget retrieves data from the  JavaScript file which I uploaded to Git and injects it into a specified <div> on the page. As such, by opening the index1.html file, in a web browser, the following script tag will inject the targetDivId weatherWidget into the web page: <!-- <script src= "https://arg224.github.io/Rise/weatherWidget.js" targetDivId="weatherWidget" ></script> --> 
+
+#### This program can be run both locally and not. To run locally open a terminal and create a server by typing: npx live-server and clicking into index1. 
 
 #### The testCase file contains a function I used to test the injection of this widget into the body of any webpage. 
 

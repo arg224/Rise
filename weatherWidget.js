@@ -34,8 +34,8 @@ const isLatLngRE = /\d+,\d+/;
 function addWidget(divId = "defaultWidgetContainer") {
     const styleLink = document.createElement("link");
     styleLink.rel = "stylesheet";
-    // styleLink.href = "https://arg224.github.io/Rise/weatherWidget.css"
-    styleLink.href = "weatherWidget.css"
+    styleLink.href = "https://arg224.github.io/Rise/weatherWidget.css"
+    // styleLink.href = "weatherWidget.css"
 
     document.head.appendChild(styleLink)
     if (!document.querySelector(`#${divId}`)) {

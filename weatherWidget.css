@@ -1,6 +1,6 @@
 .weather-widget .day-list {
     padding-top: 30px;
-    display: flex; 
+    display: flex;
     flex-direction: row;
     column-gap: 10px;
     background-color: lightblue;
@@ -8,26 +8,39 @@
     padding-left: 10px;
     padding-right: 10px;
 }
-.day{
+
+.day {
     background-color: whitesmoke;
     padding: 4px;
 }
+
 .weather-widget .day-list .date {
-  font-size: larger;
-  text-align: center;
+    font-size: larger;
+    text-align: center;
 }
+
 .temp {
     font-size: larger;
     text-align: center;
 }
-.input-box{
+
+.input-box {
     padding-bottom: 10px;
     padding-right: 10px;
 }
-.button-box{
+
+.button-box {
     margin-left: 5px;
     padding-left: 5px;
 }
-.input-section{
+
+.input-section {
     display: flex;
+}
+
+.error-message {
+    color: red;
+    padding-top: 5px;
+    margin-left: 5px;
+
 }

@@ -31,14 +31,14 @@ const weatherCodes = {
 
 const isLatLngRE = /\d+,\d+/;
 
-function addWidget(divId="defaultWidgetContainer") {
+function addWidget(divId = "defaultWidgetContainer") {
     const styleLink = document.createElement("link");
     styleLink.rel = "stylesheet";
-    styleLink.href = "https://arg224.github.io/Rise/weatherWidget.css"
-    // styleLink.href = "weatherWidget.css"
+    // styleLink.href = "https://arg224.github.io/Rise/weatherWidget.css"
+    styleLink.href = "weatherWidget.css"
 
     document.head.appendChild(styleLink)
-    if(!document.querySelector(`#${divId}`)){
+    if (!document.querySelector(`#${divId}`)) {
         const newDiv = document.createElement("div");
         newDiv.id = divId;
         document.body.append(newDiv);
@@ -58,35 +58,34 @@ function addWidget(divId="defaultWidgetContainer") {
             });
         }
         else {
-            fetch(`https://api.api-ninjas.com/v1/geocoding?city=${city}`,{
+            fetch(`https://api.api-ninjas.com/v1/geocoding?city=${city}`, {
                 headers: { 'X-Api-Key': 'XFrJltKJN4eoygM62TMdQJncVTP9vffcSqRyvykQ' },
-            }).then(v=>v.json()).then(result=> {
+            }).then(v => v.json()).then(result => {
                 console.log("printing new ajax call", result)
                 if (result && result.length > 0) {
-                        // Take the first result
-                        const firstResult = result[0];
-                        const storedLat = firstResult.latitude;
-                        const storedLng = firstResult.longitude;
-                        getWeatherData(storedLat, storedLng).then(data => {
-                            console.log(data)
-                            displayWeatherData(data, target);
-                        });
-                    }
-                    else{
-                        showError(target, "No Results Found");
-                    }
+                    const firstResult = result[0];
+                    const storedLat = firstResult.latitude;
+                    const storedLng = firstResult.longitude;
+                    getWeatherData(storedLat, storedLng).then(data => {
+                        console.log(data)
+                        displayWeatherData(data, target);
+                    });
+                }
+                else {
+                    showError(target, "No Results Found");
+                }
             });
         }
     })
 }
 
-function showError(target, message){
-    target.querySelector(".error-message").innerText=message
+function showError(target, message) {
+    target.querySelector(".error-message").innerText = message
 
 }
 
-function clearError(target){
-    target.querySelector(".error-message").innerText= " "
+function clearError(target) {
+    target.querySelector(".error-message").innerText = " "
 }
 function addLocationWidget(target, onSelect) {
     const container = document.createElement("div");
@@ -147,20 +146,10 @@ function displayWeatherData(weatherData, target) {
     const container = document.createElement("div");
     container.id = 'weatherContainer';
     container.classList.add("day-list")
-
-    // Array of date strings
     const dateStringArray = weatherData.daily.time;
-    console.log(dateStringArray);
-
-    // Parse date strings into Date objects
     const dateArray = dateStringArray.map(dateString => new Date(dateString));
-
-    // Array of day names
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-    // Map Date objects to their corresponding day names
     const daysArray = dateArray.map(date => daysOfWeek[date.getDay()]);
-
     const dayTemperatures = {
         'Sunday': [],
         'Monday': [],
@@ -170,20 +159,18 @@ function displayWeatherData(weatherData, target) {
         'Friday': [],
         'Saturday': [],
     };
-
     weatherData.daily.time.forEach((time, idx) => {
         const dayName = daysArray[idx];
         const temperature = weatherData.daily.apparent_temperature_max[idx];
         dayTemperatures[dayName].push(temperature);
-        console.log("dayTemperatures", dayTemperatures);
     });
 
     for (let i = 0; i < 7; i++) {
         const dayName = daysOfWeek[i];
         const temperatures = dayTemperatures[dayName];
-        console.log("temperatures", temperatures);
+        // console.log("temperatures", temperatures);
         const averageTemperature = calculateAverage(temperatures);
-        console.log("averageTemperature", temperatures, "+", averageTemperature);
+        // console.log("averageTemperature", temperatures, "+", averageTemperature);
         const dayData = createDayItem(daysArray[i], Math.round(averageTemperature), weatherData.daily.weather_code[i])
         container.appendChild(dayData);
     }
@@ -191,7 +178,6 @@ function displayWeatherData(weatherData, target) {
 
 }
 
-// Function to calculate the average of an array of numbers
 function calculateAverage(numbers) {
     const sum = numbers.reduce((acc, num) => acc + num, 0);
     return sum / numbers.length;
@@ -231,8 +217,8 @@ function createDayItem(date, temperature, code) {
         elem.setAttribute("width", "200");
         dayData.appendChild(codeDiv).appendChild(elem);
     }
-    // Any form of Rain
-    if (code === 51 || code === 53 || code === 55 || code === 56 || code === 57 || code === 61 || code === 63 || code === 65 || code === 66 || code === 67|| code === 80 || code === 81 || code === 82) {
+    // Rain
+    if (code === 51 || code === 53 || code === 55 || code === 56 || code === 57 || code === 61 || code === 63 || code === 65 || code === 66 || code === 67 || code === 80 || code === 81 || code === 82) {
         elem.setAttribute("src", "https://img.freepik.com/free-vector/rainy-cloud-sticker-white-background_1308-59851.jpg");
         elem.setAttribute("height", "200");
         elem.setAttribute("width", "200");
@@ -259,5 +245,5 @@ function createDayItem(date, temperature, code) {
     return dayData;
 
 }
-const target= document.currentScript.getAttribute("targetDivId"); 
+const target = document.currentScript.getAttribute("targetDivId");
 addWidget(target);

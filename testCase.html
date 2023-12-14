@@ -1,0 +1,8 @@
+<script src="https://arg224.github.io/Rise/weatherWidget.js" targetDivId="weatherWidget"></script>
+
+function injectWidget(id){
+const s = document.createElement("script");
+s.src = "https://arg224.github.io/Rise/weatherWidget.js";
+s.setAttirbute("targetDivId",id);
+document.body.appendChild(s);
+}

@@ -178,11 +178,6 @@ function displayWeatherData(weatherData, target) {
 
 }
 
-function calculateAverage(numbers) {
-    const sum = numbers.reduce((acc, num) => acc + num, 0);
-    return sum / numbers.length;
-}
-
 function createDayItem(date, temperature, code) {
     const dayData = document.createElement("div");
     dayData.classList.add("day")
